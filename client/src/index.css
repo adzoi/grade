@@ -446,8 +446,56 @@ nav .logout-btn:hover {
 }
 
 .highlight-icon {
-  font-size: 2rem;
-  line-height: 1;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.highlight-icon::before {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.icon-classroom {
+  background: linear-gradient(135deg, #e8f0e4 0%, #d4e4cd 100%);
+  color: #5f8d4e;
+}
+
+.icon-classroom::before {
+  content: "C";
+}
+
+.icon-spark {
+  background: linear-gradient(135deg, var(--accent-light) 0%, #edd9c8 100%);
+  color: var(--accent);
+}
+
+.icon-spark::before {
+  content: "+";
+  font-size: 1.5rem;
+}
+
+.icon-assignment {
+  background: linear-gradient(135deg, #fef3e2 0%, #fde5c3 100%);
+  color: #a67c2c;
+}
+
+.icon-assignment::before {
+  content: "A";
+}
+
+.icon-check {
+  background: linear-gradient(135deg, #e8f0e4 0%, #d4e4cd 100%);
+  color: #5f8d4e;
+}
+
+.icon-check::before {
+  content: "✓";
+  font-size: 1.5rem;
 }
 
 .highlight-content {

@@ -92,7 +92,22 @@
       gap: 20px;
       box-shadow: var(--shadow);
     }
-    .highlight-icon { font-size: 2rem; }
+    .highlight-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .icon-classroom {
+      background: linear-gradient(135deg, #e8f0e4 0%, #d4e4cd 100%);
+      color: #5f8d4e;
+    }
+    .icon-classroom::before { content: "C"; }
     .highlight-content { flex: 1; }
     .highlight-label {
       font-size: 0.75rem;
@@ -226,7 +241,7 @@
     <div class="dashboard-grid">
       <div class="dashboard-main">
         <div class="highlight-card">
-          <div class="highlight-icon">📚</div>
+          <div class="highlight-icon icon-classroom"></div>
           <div class="highlight-content">
             <span class="highlight-label">Your classroom</span>
             <h3>Biology 101</h3>

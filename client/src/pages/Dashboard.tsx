@@ -46,7 +46,7 @@ export default function Dashboard() {
             <div className="dashboard-main">
               {classroom ? (
                 <div className="highlight-card">
-                  <div className="highlight-icon">📚</div>
+                  <div className="highlight-icon icon-classroom"></div>
                   <div className="highlight-content">
                     <span className="highlight-label">Your classroom</span>
                     <h3>{classroom.name}</h3>
@@ -56,7 +56,7 @@ export default function Dashboard() {
                 </div>
               ) : (
                 <div className="highlight-card highlight-card-empty">
-                  <div className="highlight-icon">✨</div>
+                  <div className="highlight-icon icon-spark"></div>
                   <div className="highlight-content">
                     <h3>Create your first classroom</h3>
                     <p>Get started by setting up a space for your students.</p>
@@ -119,7 +119,7 @@ export default function Dashboard() {
           <div className="student-dashboard">
             {upcomingDeadline ? (
               <div className="highlight-card">
-                <div className="highlight-icon">📝</div>
+                <div className="highlight-icon icon-assignment"></div>
                 <div className="highlight-content">
                   <span className="highlight-label">Due soon</span>
                   <h3>{upcomingDeadline.task}</h3>
@@ -129,7 +129,7 @@ export default function Dashboard() {
               </div>
             ) : (
               <div className="highlight-card highlight-card-empty">
-                <div className="highlight-icon">🎉</div>
+                <div className="highlight-icon icon-check"></div>
                 <div className="highlight-content">
                   <h3>You're all caught up!</h3>
                   <p>No assignments due. Enjoy your free time.</p>
