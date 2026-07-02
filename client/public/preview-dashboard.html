@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Preview</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #faf8f5;
+      --bg-card: #fff;
+      --bg-nav: #2d2a26;
+      --text: #3d3a36;
+      --text-muted: #7a756d;
+      --accent: #c77d4a;
+      --accent-hover: #b36b3a;
+      --accent-light: #f5ebe3;
+      --border: #e8e4de;
+      --shadow: 0 2px 8px rgba(45, 42, 38, 0.06);
+    }
+    body {
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+    }
+    nav {
+      width: 240px;
+      min-height: 100vh;
+      background: var(--bg-nav);
+      padding: 28px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: fixed;
+    }
+    nav .brand {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #f5f2ed;
+      margin-bottom: 32px;
+      padding: 0 12px;
+    }
+    nav .brand span {
+      display: block;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: #8a857d;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+    nav a {
+      color: #c4bfb6;
+      text-decoration: none;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+    nav a.active { background: rgba(199, 125, 74, 0.2); color: #e8b896; }
+    main { margin-left: 240px; padding: 40px 48px; flex: 1; max-width: 900px; }
+    
+    .dashboard-header { margin-bottom: 32px; }
+    .dashboard-header h2 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #2d2a26;
+      margin-bottom: 6px;
+    }
+    .dashboard-subtitle { color: var(--text-muted); font-size: 1rem; }
+    
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .dashboard-main { display: flex; flex-direction: column; gap: 16px; }
+    
+    .highlight-card {
+      background: linear-gradient(135deg, #fff 0%, #faf8f5 100%);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      box-shadow: var(--shadow);
+    }
+    .highlight-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .icon-classroom {
+      background: linear-gradient(135deg, #e8f0e4 0%, #d4e4cd 100%);
+      color: #5f8d4e;
+    }
+    .icon-classroom::before { content: "C"; }
+    .highlight-content { flex: 1; }
+    .highlight-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .highlight-content h3 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .highlight-content p { color: var(--text-muted); font-size: 0.9rem; }
+    .highlight-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      align-self: center;
+    }
+    
+    .upcoming-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 10px;
+      padding: 20px 24px;
+      box-shadow: var(--shadow);
+    }
+    .upcoming-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .upcoming-card h4 { font-size: 1rem; margin: 6px 0 4px; }
+    .upcoming-card p { font-size: 0.85rem; color: var(--text-muted); }
+    
+    .dashboard-sidebar { display: flex; flex-direction: column; gap: 20px; }
+    .quick-stats {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: var(--shadow);
+    }
+    .quick-stat { display: flex; justify-content: space-between; align-items: center; }
+    .quick-stat-number {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .quick-stat-label { font-size: 0.85rem; color: var(--text-muted); }
+    
+    .quick-actions {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .quick-actions h4 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .quick-action-btn {
+      display: block;
+      padding: 10px 14px;
+      background: var(--bg);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      margin-bottom: 8px;
+    }
+    
+    .recent-section h4 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .avatar-row { display: flex; gap: 8px; }
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .avatar-more {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="brand">Gradebook<span>Student Portal</span></div>
+    <a class="active">Dashboard</a>
+    <a>Students</a>
+    <a>Teachers</a>
+    <a>Classroom</a>
+    <a>Assignments</a>
+  </nav>
+  <main>
+    <div class="dashboard-header">
+      <h2>Good afternoon</h2>
+      <p class="dashboard-subtitle">Here's what's happening in your classroom today.</p>
+    </div>
+    
+    <div class="dashboard-grid">
+      <div class="dashboard-main">
+        <div class="highlight-card">
+          <div class="highlight-icon icon-classroom"></div>
+          <div class="highlight-content">
+            <span class="highlight-label">Your classroom</span>
+            <h3>Biology 101</h3>
+            <p>24 students enrolled</p>
+          </div>
+          <a class="highlight-link">Manage →</a>
+        </div>
+        
+        <div class="upcoming-card">
+          <span class="upcoming-label">Next deadline</span>
+          <h4>Chapter 5 Lab Report</h4>
+          <p>Due Friday, Jul 4</p>
+        </div>
+      </div>
+      
+      <div class="dashboard-sidebar">
+        <div class="quick-stats">
+          <div class="quick-stat">
+            <span class="quick-stat-number">24</span>
+            <span class="quick-stat-label">Students</span>
+          </div>
+          <div class="quick-stat">
+            <span class="quick-stat-number">8</span>
+            <span class="quick-stat-label">Assignments</span>
+          </div>
+          <div class="quick-stat">
+            <span class="quick-stat-number">3</span>
+            <span class="quick-stat-label">Teachers</span>
+          </div>
+        </div>
+        
+        <div class="quick-actions">
+          <h4>Quick actions</h4>
+          <a class="quick-action-btn">+ New assignment</a>
+          <a class="quick-action-btn">+ Add students</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="recent-section">
+      <h4>Recent students</h4>
+      <div class="avatar-row">
+        <div class="avatar">A</div>
+        <div class="avatar">M</div>
+        <div class="avatar">S</div>
+        <div class="avatar">J</div>
+        <div class="avatar">K</div>
+        <div class="avatar avatar-more">+19</div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -66,59 +66,59 @@ export default function Assignments() {
 
       {role === "teacher" && (
         <div className="form">
-          <label>Task Description</label>
-          <input value={task} onChange={e => setTask(e.target.value)} placeholder="Write a report on..." />
-          <label>Deadline</label>
+          <label>What's the assignment?</label>
+          <input value={task} onChange={e => setTask(e.target.value)} placeholder="e.g. Write a book report, Solve problems 1-10" />
+          <label>Due date</label>
           <input type="datetime-local" value={deadline} onChange={e => setDeadline(e.target.value)} />
           {message && <p className="success">{message}</p>}
-          <button className="btn btn-primary" onClick={handleCreate}>Create Assignment</button>
+          <button className="btn btn-primary" onClick={handleCreate}>Create assignment</button>
         </div>
       )}
 
-      {assignments.length === 0 && <p className="empty">No assignments yet.</p>}
+      {assignments.length === 0 && <p className="empty">{role === "teacher" ? "No assignments created yet. Create one above." : "No assignments available yet."}</p>}
 
       {assignments.map(a => (
-        <div key={a.id} style={{ marginBottom: "1rem" }}>
+        <div key={a.id} style={{ marginBottom: "16px" }}>
           <div className="card">
             <div className="card-info">
               <h3>{a.task}</h3>
-              <p>Deadline: {new Date(a.deadline).toLocaleString()}</p>
+              <p>Due {new Date(a.deadline).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</p>
             </div>
-            <div style={{ display: "flex", gap: "0.5rem" }}>
+            <div style={{ display: "flex", gap: "8px" }}>
               {role === "teacher" && (
                 <>
-                  <button className="btn btn-primary" onClick={() => handleViewSubmissions(a)}>Submissions</button>
+                  <button className="btn btn-primary" onClick={() => handleViewSubmissions(a)}>View submissions</button>
                   <button className="btn btn-danger" onClick={() => handleDelete(a.id)}>Delete</button>
                 </>
               )}
               {role === "student" && (
-                <button className="btn btn-success" onClick={() => setSelectedAssignment(a)}>Submit</button>
+                <button className="btn btn-success" onClick={() => setSelectedAssignment(a)}>Submit work</button>
               )}
             </div>
           </div>
 
           {selectedAssignment?.id === a.id && role === "student" && (
-            <div className="card" style={{ flexDirection: "column", alignItems: "flex-start" }}>
-              <label style={{ marginBottom: "0.5rem", color: "#94a3b8" }}>Your submission</label>
-              <textarea value={submitContent} onChange={e => setSubmitContent(e.target.value)} placeholder="Write your answer here..." style={{ width: "100%", marginBottom: "0.8rem" }} />
+            <div className="card" style={{ flexDirection: "column", alignItems: "flex-start", marginTop: "8px" }}>
+              <label style={{ marginBottom: "8px", color: "var(--text-muted)", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.04em", fontWeight: 500 }}>Your work</label>
+              <textarea value={submitContent} onChange={e => setSubmitContent(e.target.value)} placeholder="Type or paste your answer here..." style={{ width: "100%", marginBottom: "12px" }} />
               {message && <p className="success">{message}</p>}
-              <button className="btn btn-primary" onClick={() => handleSubmit(a.id)}>Submit</button>
+              <button className="btn btn-primary" onClick={() => handleSubmit(a.id)}>Turn in</button>
             </div>
           )}
 
           {selectedAssignment?.id === a.id && role === "teacher" && (
-            <div style={{ paddingLeft: "1rem" }}>
-              {submissions.length === 0 && <p className="empty">No submissions yet.</p>}
+            <div style={{ paddingLeft: "16px", marginTop: "8px" }}>
+              {submissions.length === 0 && <p className="empty">No submissions yet for this assignment.</p>}
               {submissions.map(s => (
                 <div className="card" key={s.id} style={{ flexDirection: "column", alignItems: "flex-start" }}>
-                  <div className="card-info" style={{ marginBottom: "0.8rem" }}>
-                    <h3>{s.student?.name}</h3>
-                    <p>{s.content || "No content submitted"}</p>
-                    <p style={{ marginTop: "0.3rem" }}>
-                      Grade: <span className="tag">{s.grade ?? "Not graded"}</span>
+                  <div className="card-info" style={{ marginBottom: "12px", width: "100%" }}>
+                    <h3>{s.student?.name || "Unknown student"}</h3>
+                    <p style={{ marginTop: "4px" }}>{s.content || "No content submitted"}</p>
+                    <p style={{ marginTop: "8px" }}>
+                      Grade: <span className={`tag ${s.grade != null ? "tag-green" : ""}`}>{s.grade != null ? `${s.grade}/10` : "Pending"}</span>
                     </p>
                   </div>
-                  <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                  <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
                     <input
                       style={{ width: "80px", marginBottom: 0 }}
                       type="number"
@@ -128,11 +128,11 @@ export default function Assignments() {
                       value={gradeInputs[s.id] || ""}
                       onChange={e => setGradeInputs(prev => ({ ...prev, [s.id]: e.target.value }))}
                     />
-                    <button className="btn btn-primary" onClick={() => handleGrade(a.id, s.id)}>Grade</button>
+                    <button className="btn btn-primary" onClick={() => handleGrade(a.id, s.id)}>Save grade</button>
                   </div>
                 </div>
               ))}
-              {message && <p className="success">{message}</p>}
+              {message && <p className="success" style={{ marginTop: "12px" }}>{message}</p>}
             </div>
           )}
         </div>
