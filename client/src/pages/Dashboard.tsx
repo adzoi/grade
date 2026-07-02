@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { api } from "../api";
 
 export default function Dashboard() {
@@ -8,6 +9,13 @@ export default function Dashboard() {
   const [assignments, setAssignments] = useState<any[]>([]);
 
   const role = localStorage.getItem("role");
+  
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 17) return "Good afternoon";
+    return "Good evening";
+  };
 
   useEffect(() => {
     api.getStudents().then(d => Array.isArray(d) ? setStudents(d) : {}).catch(() => {});
@@ -16,63 +24,148 @@ export default function Dashboard() {
     api.getAssignments().then(d => Array.isArray(d) ? setAssignments(d) : {}).catch(() => {});
   }, []);
 
-  return (
-    <div>
-      <h2>Overview</h2>
+  const pendingAssignments = assignments.filter(a => new Date(a.deadline) > new Date());
+  const upcomingDeadline = pendingAssignments.length > 0 
+    ? pendingAssignments.sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime())[0]
+    : null;
 
-      <div className="stats">
-        {role === "teacher" && (
-          <>
-            <div className="stat-card">
-              <span>{students.length}</span>
-              <p>Students</p>
-            </div>
-            <div className="stat-card">
-              <span>{teachers.length}</span>
-              <p>Teachers</p>
-            </div>
-          </>
-        )}
-        <div className="stat-card">
-          <span>{assignments.length}</span>
-          <p>Assignments</p>
-        </div>
+  return (
+    <div className="dashboard">
+      <div className="dashboard-header">
+        <h2>{getGreeting()}</h2>
+        <p className="dashboard-subtitle">
+          {role === "teacher" 
+            ? "Here's what's happening in your classroom today."
+            : "Here's what you need to work on."}
+        </p>
       </div>
 
-      {role === "teacher" && classroom && (
-        <div className="card">
-          <div className="card-info">
-            <h3>Your classroom</h3>
-            <p>{classroom.name}</p>
-          </div>
-        </div>
-      )}
+      {role === "teacher" ? (
+        <>
+          <div className="dashboard-grid">
+            <div className="dashboard-main">
+              {classroom ? (
+                <div className="highlight-card">
+                  <div className="highlight-icon">📚</div>
+                  <div className="highlight-content">
+                    <span className="highlight-label">Your classroom</span>
+                    <h3>{classroom.name}</h3>
+                    <p>{students.length} student{students.length !== 1 ? "s" : ""} enrolled</p>
+                  </div>
+                  <Link to="/classroom" className="highlight-link">Manage →</Link>
+                </div>
+              ) : (
+                <div className="highlight-card highlight-card-empty">
+                  <div className="highlight-icon">✨</div>
+                  <div className="highlight-content">
+                    <h3>Create your first classroom</h3>
+                    <p>Get started by setting up a space for your students.</p>
+                  </div>
+                  <Link to="/classroom" className="btn btn-primary">Create classroom</Link>
+                </div>
+              )}
 
-      {role === "teacher" && !classroom && (
-        <div className="card">
-          <div className="card-info">
-            <h3>No classroom yet</h3>
-            <p>Head to the Classroom page to create one</p>
-          </div>
-        </div>
-      )}
+              {upcomingDeadline && (
+                <div className="upcoming-card">
+                  <span className="upcoming-label">Next deadline</span>
+                  <h4>{upcomingDeadline.task}</h4>
+                  <p>Due {new Date(upcomingDeadline.deadline).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</p>
+                </div>
+              )}
+            </div>
 
-      {assignments.length > 0 && (
-        <div className="card">
-          <div className="card-info">
-            <h3>Latest assignments</h3>
-            <p>{assignments.slice(0, 3).map((a: any) => a.task).join(" · ")}</p>
-          </div>
-        </div>
-      )}
+            <div className="dashboard-sidebar">
+              <div className="quick-stats">
+                <div className="quick-stat">
+                  <span className="quick-stat-number">{students.length}</span>
+                  <span className="quick-stat-label">Students</span>
+                </div>
+                <div className="quick-stat">
+                  <span className="quick-stat-number">{assignments.length}</span>
+                  <span className="quick-stat-label">Assignments</span>
+                </div>
+                <div className="quick-stat">
+                  <span className="quick-stat-number">{teachers.length}</span>
+                  <span className="quick-stat-label">Teachers</span>
+                </div>
+              </div>
 
-      {role === "teacher" && students.length > 0 && (
-        <div className="card">
-          <div className="card-info">
-            <h3>Your students</h3>
-            <p>{students.slice(0, 4).map((s: any) => s.name).join(" · ")}{students.length > 4 ? ` +${students.length - 4} more` : ""}</p>
+              <div className="quick-actions">
+                <h4>Quick actions</h4>
+                <Link to="/assignments" className="quick-action-btn">+ New assignment</Link>
+                <Link to="/students" className="quick-action-btn">+ Add students</Link>
+              </div>
+            </div>
           </div>
-        </div>
+
+          {students.length > 0 && (
+            <div className="recent-section">
+              <h4>Recent students</h4>
+              <div className="avatar-row">
+                {students.slice(0, 5).map((s: any) => (
+                  <div key={s.id} className="avatar" title={s.name}>
+                    {s.name.charAt(0).toUpperCase()}
+                  </div>
+                ))}
+                {students.length > 5 && (
+                  <div className="avatar avatar-more">+{students.length - 5}</div>
+                )}
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          <div className="student-dashboard">
+            {upcomingDeadline ? (
+              <div className="highlight-card">
+                <div className="highlight-icon">📝</div>
+                <div className="highlight-content">
+                  <span className="highlight-label">Due soon</span>
+                  <h3>{upcomingDeadline.task}</h3>
+                  <p>Due {new Date(upcomingDeadline.deadline).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</p>
+                </div>
+                <Link to="/assignments" className="btn btn-primary">View assignment</Link>
+              </div>
+            ) : (
+              <div className="highlight-card highlight-card-empty">
+                <div className="highlight-icon">🎉</div>
+                <div className="highlight-content">
+                  <h3>You're all caught up!</h3>
+                  <p>No assignments due. Enjoy your free time.</p>
+                </div>
+              </div>
+            )}
+
+            <div className="student-stats">
+              <div className="student-stat-card">
+                <span>{assignments.length}</span>
+                <p>Total assignments</p>
+              </div>
+              <div className="student-stat-card">
+                <span>{pendingAssignments.length}</span>
+                <p>Pending</p>
+              </div>
+            </div>
+
+            {assignments.length > 0 && (
+              <div className="assignments-preview">
+                <h4>All assignments</h4>
+                {assignments.slice(0, 4).map((a: any) => (
+                  <div key={a.id} className="assignment-row">
+                    <div>
+                      <strong>{a.task}</strong>
+                      <span>Due {new Date(a.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                    </div>
+                  </div>
+                ))}
+                {assignments.length > 4 && (
+                  <Link to="/assignments" className="see-all-link">See all {assignments.length} assignments →</Link>
+                )}
+              </div>
+            )}
+          </div>
+        </>
       )}
     </div>
   );
