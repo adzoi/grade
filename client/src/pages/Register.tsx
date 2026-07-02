@@ -28,24 +28,25 @@ export default function Register() {
   return (
     <div className="login-wrapper">
       <div className="login-box">
-        <h2>Create Account</h2>
+        <h2>Get started</h2>
+        <p className="subtitle">Create your Gradebook account</p>
         <div className="role-toggle">
-          <button className={role === "student" ? "active" : ""} onClick={() => setRole("student")}>Student</button>
-          <button className={role === "teacher" ? "active" : ""} onClick={() => setRole("teacher")}>Teacher</button>
+          <button className={role === "student" ? "active" : ""} onClick={() => setRole("student")}>I'm a student</button>
+          <button className={role === "teacher" ? "active" : ""} onClick={() => setRole("teacher")}>I'm a teacher</button>
         </div>
         <div className="form">
-          <label>Name</label>
-          <input value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" />
-          <label>Email</label>
-          <input value={email} onChange={e => setEmail(e.target.value)} placeholder="email@example.com" />
+          <label>Full name</label>
+          <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" />
+          <label>Email address</label>
+          <input value={email} onChange={e => setEmail(e.target.value)} placeholder="you@school.edu" />
           <label>Password</label>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" />
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Choose a secure password" />
           {error && <p className="error">{error}</p>}
           {success && <p className="success">{success}</p>}
-          <button className="btn btn-primary" style={{ width: "100%" }} onClick={handleRegister}>Register</button>
+          <button className="btn btn-primary" style={{ width: "100%" }} onClick={handleRegister}>Create account</button>
         </div>
-        <p style={{ textAlign: "center", color: "#94a3b8", fontSize: "0.85rem" }}>
-          Already have an account? <Link to="/login" style={{ color: "#6366f1" }}>Login</Link>
+        <p className="link-text">
+          Already have an account? <Link to="/login">Sign in</Link>
         </p>
       </div>
     </div>

@@ -18,22 +18,18 @@ export default function Dashboard() {
 
   return (
     <div>
-      <h2>Dashboard</h2>
+      <h2>Overview</h2>
 
       <div className="stats">
         {role === "teacher" && (
           <>
             <div className="stat-card">
               <span>{students.length}</span>
-              <p>Total Students</p>
+              <p>Students</p>
             </div>
             <div className="stat-card">
               <span>{teachers.length}</span>
-              <p>Total Teachers</p>
-            </div>
-            <div className="stat-card">
-              <span>{classroom ? 1 : 0}</span>
-              <p>Classroom</p>
+              <p>Teachers</p>
             </div>
           </>
         )}
@@ -43,37 +39,40 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {role === "teacher" && (
+      {role === "teacher" && classroom && (
         <div className="card">
           <div className="card-info">
-            <h3>Classroom</h3>
-            <p>{classroom ? classroom.name : "No classroom created yet"}</p>
+            <h3>Your classroom</h3>
+            <p>{classroom.name}</p>
           </div>
         </div>
       )}
 
-      <div className="card">
-        <div className="card-info">
-          <h3>Recent Assignments</h3>
-          <p>{assignments.length === 0 ? "No assignments yet" : assignments.slice(0, 3).map((a: any) => a.task).join(", ")}</p>
+      {role === "teacher" && !classroom && (
+        <div className="card">
+          <div className="card-info">
+            <h3>No classroom yet</h3>
+            <p>Head to the Classroom page to create one</p>
+          </div>
         </div>
-      </div>
+      )}
 
-      {role === "teacher" && (
-        <>
-          <div className="card">
-            <div className="card-info">
-              <h3>Recent Students</h3>
-              <p>{students.length === 0 ? "No students yet" : students.slice(0, 3).map((s: any) => s.name).join(", ")}</p>
-            </div>
+      {assignments.length > 0 && (
+        <div className="card">
+          <div className="card-info">
+            <h3>Latest assignments</h3>
+            <p>{assignments.slice(0, 3).map((a: any) => a.task).join(" · ")}</p>
           </div>
-          <div className="card">
-            <div className="card-info">
-              <h3>Recent Teachers</h3>
-              <p>{teachers.length === 0 ? "No teachers yet" : teachers.slice(0, 3).map((t: any) => t.name).join(", ")}</p>
-            </div>
+        </div>
+      )}
+
+      {role === "teacher" && students.length > 0 && (
+        <div className="card">
+          <div className="card-info">
+            <h3>Your students</h3>
+            <p>{students.slice(0, 4).map((s: any) => s.name).join(" · ")}{students.length > 4 ? ` +${students.length - 4} more` : ""}</p>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

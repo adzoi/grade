@@ -24,13 +24,16 @@ function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <nav>
-        <h1>🎓 Grading System</h1>
+        <div className="brand">
+          Gradebook
+          <span>Student Portal</span>
+        </div>
         <NavLink to="/">Dashboard</NavLink>
         {user?.role === "teacher" && <NavLink to="/students">Students</NavLink>}
         {user?.role === "teacher" && <NavLink to="/teachers">Teachers</NavLink>}
         {user?.role === "teacher" && <NavLink to="/classroom">Classroom</NavLink>}
         <NavLink to="/assignments">Assignments</NavLink>
-        <button onClick={logout} className="btn btn-danger" style={{ marginTop: "auto" }}>Logout</button>
+        <button onClick={logout} className="btn logout-btn">Sign out</button>
       </nav>
       <main>{children}</main>
     </>

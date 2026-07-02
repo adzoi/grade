@@ -25,17 +25,18 @@ export default function Login() {
   return (
     <div className="login-wrapper">
       <div className="login-box">
-        <h2>🎓 Grading System</h2>
+        <h2>Welcome back</h2>
+        <p className="subtitle">Sign in to your Gradebook account</p>
         <div className="form">
-          <label>Email</label>
-          <input value={email} onChange={e => setEmail(e.target.value)} placeholder="email@example.com" />
+          <label>Email address</label>
+          <input value={email} onChange={e => setEmail(e.target.value)} placeholder="you@school.edu" />
           <label>Password</label>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" />
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter your password" />
           {error && <p className="error">{error}</p>}
-          <button className="btn btn-primary" style={{ width: "100%" }} onClick={handleLogin}>Login</button>
+          <button className="btn btn-primary" style={{ width: "100%" }} onClick={handleLogin}>Sign in</button>
         </div>
-        <p style={{ textAlign: "center", color: "#94a3b8", fontSize: "0.85rem" }}>
-          Don't have an account? <Link to="/register" style={{ color: "#6366f1" }}>Register</Link>
+        <p className="link-text">
+          New here? <Link to="/register">Create an account</Link>
         </p>
       </div>
     </div>
